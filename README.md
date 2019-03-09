@@ -29,8 +29,8 @@ Running the solution produces 2 files in the current directory: `assignments.csv
 
 1. How long did you spend working on the problem? What did you find to be the most difficult part?
 * I spent ~6 hrs in total. A correct first stab with no I/O was done in about 90mins. That said, I had a few challenges:
-  * I chose to do the problem in Kotlin. I dont use Kotlin everyday but I really liked the language when I came across it a few months ago.
-  * I initially used IntelliJ to create the maven Kotlin project but then decided that my reviewers should have to install maven to run my solution so I refactored to make my solution a kotlin script.
+  * I chose to do the problem in Kotlin. I dont use Kotlin everyday but I really liked the language when I came across it a few months ago. Writing clean readable functional code requires thought.
+  * I initially used IntelliJ to create the maven Kotlin project but then decided that my reviewers should not have to install maven to run my solution so I refactored to make my solution a kotlin script.
   * I first implemented the input file parsing using jackson to read the CSV to my DTO classes but I decided to remove all dependencies from my script
 2. How would you modify your data model or code to account for an eventual introduction of new, as-of-yet unknown types of covenants, beyond just maximum default likelihood and state restrictions?
 ```
@@ -56,7 +56,7 @@ data class Covenant(
   `GET /solution/facilities/{id}?fields=availableAmount` - gets attribute of a facility
 * Creating endpoints for every attribute is less than ideal. Adding field filter query param here is like a poor coder's GraphQL. 
 5. How might you improve your assignment algorithm if you were permitted to assign loans in batch rather than streaming? We are not looking for code here, but pseudo code or description of a revised algorithm appreciated.
-* For a given facility you could loop over the batch of unfunded loans removing them once funded while the facility still has capacity
+* For a given facility you could loop over the batch of unfunded loans removing them once funded while the facility still has capacity. 
 6. Discuss your solution’s runtime complexity.
 * I loop over every facility (in the worst case) for every loan so O(n*m) for loan funding. This could in theory be improved by keeping a different list for facilities where we remove fully drawn facilities but I felt that optimization was not worth the complexity. I break fast on iteration so best case would be pretty good.
 * I sort the facilities by interest rate once on input so thats typically O(n log n)
