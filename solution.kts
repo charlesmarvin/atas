@@ -109,14 +109,13 @@ fun meetsCovenants(loan: Loan, facility: Facility, covenants: Map<Int, List<Cove
 }
 
 fun checkCovenant(covenant: Covenant, loan: Loan): Boolean {
-    val maxDefaultLikelihood: Float =
-        if (covenant.maxDefaultLikelihood != null) covenant.maxDefaultLikelihood else Float.MAX_VALUE
+    val maxDefaultLikelihood: Float = covenant.maxDefaultLikelihood ?: Float.MAX_VALUE
     return !(loan.state == covenant.bannedState || loan.defaultLikelihood > maxDefaultLikelihood)
 }
 
 // IO Utils
 fun loadFacilities(fileName: String): List<Facility> {
-    return load(fileName) { s: String -> parseFacility(s) }.toMutableList()
+    return load(fileName) { s: String -> parseFacility(s) }
 }
 
 fun loadBanks(fileName: String): List<Bank> {
@@ -183,8 +182,9 @@ if (args.size == 1) {
 }
 
 val banksById = loadBanks("${inputDir}/banks.csv").map { it.bankId to it }.toMap()
-val facilities = loadFacilities("${inputDir}/facilities.csv").filter { facility -> banksById.containsKey(facility.bankId) }
-    .sortedWith(compareBy { it.interestRate })
+val facilities = loadFacilities("${inputDir}/facilities.csv")
+    .filter { facility -> banksById.containsKey(facility.bankId) } // sanity check to filter out unknow banks
+    .sortedWith(compareBy { it.interestRate })  
 val covenantsById = loadCovenants("${inputDir}/covenants.csv").groupBy { it.bankId }
 val loans = loadLoans("${inputDir}/loans.csv")
 val expectedYieldStrategy = DefaultExpectedYieldStrategy()
